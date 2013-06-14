@@ -3,7 +3,7 @@ var form = document.getElementById('greed'),
 
     visible = true,
 
-	updateEvent = function()
+    updateEvent = function()
     {
         var code =
         "window.__greed = window.__greed || new Greed();"+
@@ -11,7 +11,7 @@ var form = document.getElementById('greed'),
             "size: "+form.size.value+","+
             "top: -"+(form.top.value || 0)+","+
             "left: -"+(form.left.value || 0)+","+
-            "opacity: "+form.opacity.value/100+
+            "opacity: "+form.opacity.value+
         "});"
 
         chrome.tabs.executeScript(
@@ -93,5 +93,27 @@ toggle.addEventListener(
  */
 chrome.tabs.executeScript(
     null,
-    { file: 'greed.js' }
+    { file: 'greed.js' },
+    function()
+    {
+        var code = "window.__greed = window.__greed || new Greed();"+
+        "__greed.getSavedParams()";
+        chrome.tabs.executeScript(
+            null,
+            {
+                code: code
+            },
+            function(result)
+            {
+                savedparams = result[0];
+                savedparams = savedparams || {};
+                savedparams.size && (form.size.value = savedparams.size);
+                savedparams.top && (form.top.value = -savedparams.top);
+                savedparams.left && (form.left.value = -savedparams.left);
+                savedparams.opacity && (form.opacity.value = savedparams.opacity);
+
+                updateEvent();
+            }
+        );
+    }
 );

@@ -1,10 +1,15 @@
 var Greed = function()
 {
-    var canvas,
+    var LOCALSTORAGEKEY = '__greed',
+
+        canvas,
         ctx,
         max = 3000;
 
-    this.lastsize = 0;
+    this.size = 0;
+    this.top = 0;
+    this.left = 0;
+    this.opacity = 1;
 
     return {
         createCanvas: function()
@@ -20,37 +25,57 @@ var Greed = function()
             canvas.style.right = 0;
             canvas.style.bottom = 0;
             canvas.style.pointerEvents = 'none';
+            canvas.style.zIndex = 2147483647;
+        },
+
+        setConfig: function(config)
+        {
+            config = config || {};
+            
+            this.size = Math.max(1, parseInt(config.size)) || 18;
+
+            this.opacity = (config.opacity || 0 === config.opacity) ?
+                Math.max(0, config.opacity) : 100;
+
+            this.top = config.top || 0;
+
+            this.left = config.left || 0;
+
+            // Save in localstorage
+            localStorage.setItem(
+                LOCALSTORAGEKEY,
+                JSON.stringify({
+                    size: this.size,
+                    top: this.top,
+                    left: this.left,
+                    opacity: this.opacity
+                })
+            );
         },
 
         refresh: function(config)
         {
+            var prevsize = this.size,
+                shift;
+
+            config && this.setConfig(config);
+
             canvas || this.createCanvas();
-
-            config = config || {};
             
-            var // Params
-                size = Math.max(1, parseInt(config.size)) || 18,
-                opacity = Math.max(0, config.opacity) || 1,
-                top = config.top || 0,
-                left = config.left || 0,
-                
-                // Computed
-                shift = size+1;
+            shift = this.size+1;
             
-            canvas.style.top = (top-shift)+'px';
-            canvas.style.left = (left-shift)+'px';
-            canvas.style.opacity = opacity;
+            canvas.style.top = (this.top-shift)+'px';
+            canvas.style.left = (this.left-shift)+'px';
+            canvas.style.opacity = this.opacity / 100;
             
-            if (this.lastsize != size)
+            if (this.size != prevsize)
             {
-                this.lastsize = size;
-
                 ctx.fillStyle = '#000';
                 ctx.strokeStyle = '#000';
                 ctx.lineWidth = 1;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                for (var i = .5; i < max; i = i+size)
+                for (var i = .5; i < max; i = i+this.size)
                 {
                     ctx.beginPath();
                     ctx.moveTo(i, 0); 
@@ -77,6 +102,24 @@ var Greed = function()
         {
             if (!canvas) return;
             canvas.style.display = 'none';
+        },
+
+        getSavedParams: function()
+        {
+            var saved = localStorage.getItem(LOCALSTORAGEKEY);
+
+            try
+            {
+                return JSON.parse(saved);
+            }
+            catch (e) {}
+
+            return {
+                size: this.size,
+                top: this.top,
+                left: this.left,
+                opacity: this.opacity
+            };
         }
     };
 };
