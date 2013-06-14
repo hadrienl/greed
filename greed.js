@@ -6,10 +6,11 @@ var Greed = function()
         ctx,
         max = 3000;
 
-    this.size = 0;
+    this.size = 10;
     this.top = 0;
     this.left = 0;
-    this.opacity = 1;
+    this.opacity = 100;
+    this.visible = true;
 
     return {
         createCanvas: function()
@@ -32,14 +33,30 @@ var Greed = function()
         {
             config = config || {};
             
-            this.size = Math.max(1, parseInt(config.size)) || 18;
+            if (undefined !== config.size)
+            {
+                this.size = Math.max(1, parseInt(config.size));
+            }
 
-            this.opacity = (config.opacity || 0 === config.opacity) ?
-                Math.max(0, config.opacity) : 100;
+            if (undefined !== config.opacity)
+            {
+                this.opacity = Math.max(0, config.opacity);
+            }
 
-            this.top = config.top || 0;
+            if (undefined !== config.top)
+            {
+                this.top = config.top;
+            }
 
-            this.left = config.left || 0;
+            if (undefined !== config.left)
+            {
+                this.left = config.left;
+            }
+
+            if (undefined !== config.visible)
+            {
+                this.visible = config.visible;
+            }
 
             // Save in localstorage
             localStorage.setItem(
@@ -48,7 +65,8 @@ var Greed = function()
                     size: this.size,
                     top: this.top,
                     left: this.left,
-                    opacity: this.opacity
+                    opacity: this.opacity,
+                    visible: this.visible
                 })
             );
         },
@@ -72,7 +90,7 @@ var Greed = function()
             {
                 ctx.fillStyle = '#000';
                 ctx.strokeStyle = '#000';
-                ctx.lineWidth = 1;
+                ctx.lineWidth = .5;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                 for (var i = .5; i < max; i = i+this.size)
@@ -96,12 +114,18 @@ var Greed = function()
         {
             if (!canvas) return;
             canvas.style.display = 'block';
+            this.setConfig({
+                visible: true
+            });
         },
 
         hide: function()
         {
             if (!canvas) return;
             canvas.style.display = 'none';
+            this.setConfig({
+                visible: false
+            });
         },
 
         getSavedParams: function()
@@ -118,7 +142,8 @@ var Greed = function()
                 size: this.size,
                 top: this.top,
                 left: this.left,
-                opacity: this.opacity
+                opacity: this.opacity,
+                visible: this.visible
             };
         }
     };

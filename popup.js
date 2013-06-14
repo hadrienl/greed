@@ -9,8 +9,8 @@ var form = document.getElementById('greed'),
         "window.__greed = window.__greed || new Greed();"+
         "window.__greed.refresh({"+
             "size: "+form.size.value+","+
-            "top: -"+(form.top.value || 0)+","+
-            "left: -"+(form.left.value || 0)+","+
+            "top: "+(form.top.value || 0)+","+
+            "left: "+(form.left.value || 0)+","+
             "opacity: "+form.opacity.value+
         "});"
 
@@ -24,12 +24,19 @@ var form = document.getElementById('greed'),
 
     toggleEvent = function()
     {
+        toggle.getElementsByClassName(
+            visible ? 'showed' : 'hidden'
+        )[0].style.display = '';
+        toggle.getElementsByClassName(
+            visible ? 'hidden' : 'showed'
+        )[0].style.display = 'none';
+        
         if (visible)
         {
             chrome.tabs.executeScript(
                 null,
                 {
-                    code: "console.log(__greed);__greed.show();"
+                    code: "__greed.show();"
                 }
             );
         }
@@ -38,7 +45,7 @@ var form = document.getElementById('greed'),
             chrome.tabs.executeScript(
                 null,
                 {
-                    code: "console.log(__greed);__greed.hide();"
+                    code: "__greed.hide();"
                 }
             );
         }
@@ -81,8 +88,6 @@ toggle.addEventListener(
     {
         visible = !visible;
 
-        toggle.innerHTML =  visible ? 'Hide' : 'Show';
-
         toggleEvent();
     },
     true
@@ -113,6 +118,13 @@ chrome.tabs.executeScript(
                 savedparams.opacity && (form.opacity.value = savedparams.opacity);
 
                 updateEvent();
+
+                if (undefined !== savedparams.visible &&
+                    this.visible !== savedparams.visible)
+                {
+                    this.visible = savedparams.visible;
+                    toggleEvent();
+                }
             }
         );
     }

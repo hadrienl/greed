@@ -1,15 +1,59 @@
 <html>
 <head>
+	<style type="text/css">
+	* {
+		font-family: 'helvetica neue', helvetica, arial, sans-serif;
+		font-size: 18px;
+	}
+	html {
+		height: 0;
+	}
+	body {
+		width: 250px;
+		padding: 0 0 5px 0;
+	}
+	label {
+		display: block;
+	}
+	label span {
+		display: inline-block;
+		width: 150px;
+		text-align: right;
+	}
+	input {
+		border: 1px solid #aaa;
+		width: 80px;
+	}
+	button {
+		width: 100%;
+	}
+	</style>
 </head>
 <body>
 
 <form id="greed">
-    <input placeholder="grid size" name="size" type="number" value="10" />
-    <input placeholder="x axe shifting" name="left" type="number" value="0" />
-    <input placeholder="y axe shifting" name="top" type="number" value="0" />
-    <input placeholder="opacity" name="opacity" type="number" value="25" />
+	<legend>Configure your grid:</legend>
+	<label>
+		<span>Grid size:</span>
+	    <input placeholder="grid size" name="size" type="number" value="10" />
+	</label>
+	<label>
+		<span>x axe shifting:</span>
+    	<input placeholder="x axe shifting" name="left" type="number" value="0" />
+    </label>
+    <label>
+		<span>y axe shifting:</span>
+	    <input placeholder="y axe shifting" name="top" type="number" value="0" />
+	</label>
+	<label>
+		<span>Opacity (0-100):</span>
+	    <input placeholder="opacity" name="opacity" type="number" value="25" />
+	</label>
 </form>
-<button id="toggle">Hide</button>
+<button id="toggle">
+	<span class="hidden">Show the grid</span>
+	<span class="showed">Hide the grid</span>
+</button>
 
 <script type="text/javascript" src="popup.js"></script>
 </body>
