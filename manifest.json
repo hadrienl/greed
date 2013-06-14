@@ -1,8 +1,7 @@
 {
 	"name": "Greed",
-	"version": "1.0",
+	"version": "0.1",
 	"manifest_version": 2,
-
 
 	"description": "Display a grid on any web page. You can configure grid size, shifting and opacity.",
 	"icons": {

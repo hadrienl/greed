@@ -30,7 +30,7 @@ var form = document.getElementById('greed'),
         toggle.getElementsByClassName(
             visible ? 'hidden' : 'showed'
         )[0].style.display = 'none';
-        
+
         if (visible)
         {
             chrome.tabs.executeScript(
@@ -123,8 +123,9 @@ chrome.tabs.executeScript(
                     this.visible !== savedparams.visible)
                 {
                     this.visible = savedparams.visible;
-                    toggleEvent();
                 }
+
+                toggleEvent();
             }
         );
     }
