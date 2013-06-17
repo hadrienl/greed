@@ -113,8 +113,8 @@ chrome.tabs.executeScript(
                 savedparams = result[0];
                 savedparams = savedparams || {};
                 savedparams.size && (form.size.value = savedparams.size);
-                savedparams.top && (form.top.value = -savedparams.top);
-                savedparams.left && (form.left.value = -savedparams.left);
+                savedparams.top && (form.top.value = savedparams.top);
+                savedparams.left && (form.left.value = savedparams.left);
                 savedparams.opacity && (form.opacity.value = savedparams.opacity);
 
                 updateEvent();
